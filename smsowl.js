@@ -37,6 +37,14 @@ function sendPromotionalSms(senderId,to,message,smsType){
 
 
 function sendTransactionalSms(senderId,to,templateId,placeholders){
+    return sendTransGeneralSms(senderId,to,templateId,placeholders,"transactional");
+}
+
+function sendTransPremiumSms(senderId,to,templateId,placeholders){
+    return sendTransGeneralSms(senderId,to,templateId,placeholders,"transPremium");
+}
+
+function sendTransGeneralSms(senderId,to,templateId,placeholders,dndType){
     if(!Meteor.settings.smsOwl){
         throw new Meteor.Error("Account id and api key not configured. Add smsOwl :{ accountId:'',apiKey:''} to meteor settings");
     }
@@ -44,7 +52,7 @@ function sendTransactionalSms(senderId,to,templateId,placeholders){
     var postData = {
         accountId: Meteor.settings.smsOwl.accountId,
         apiKey: Meteor.settings.smsOwl.apiKey,
-        dndType: "transactional",
+        dndType: dndType,
         smsType: "normal",
         senderId: senderId,
         to: to,
@@ -65,5 +73,6 @@ function sendTransactionalSms(senderId,to,templateId,placeholders){
 
 SmsOwl = {
     sendPromotionalSms: sendPromotionalSms,
-    sendTransactionalSms: sendTransactionalSms
+    sendTransactionalSms: sendTransactionalSms,
+    sendTransPremiumSms: sendTransPremiumSms
 };
